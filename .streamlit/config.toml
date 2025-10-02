@@ -2,8 +2,8 @@
 base="dark"
 primaryColor="#db5461"          # Sea green
 backgroundColor="#8aa29e"        # Soft mint background
-secondaryBackgroundColor="#8aa29e"
+secondaryBackgroundColor="#686963"
 font = "sans serif" # Clean, modern font
 
 [server]
-runOnSave=true 
+runOnSave=true
