@@ -9,14 +9,5 @@ __pycache__/
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
 
-# Data files
-data/*.csv
-
-# Images you don't want to push
-images/*
-
-# Streamlit specific
-.streamlit/
-
 # OS files
 .DS_Store
