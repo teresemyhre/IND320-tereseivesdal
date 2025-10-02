@@ -3,11 +3,11 @@ import altair as alt
 
 # Define your muted theme palette (exactly 5 colors for your 5 series)
 custom_colors = [
-    "#1f77b4",  # muted blue
-    "#ff7f0e",  # soft orange
-    "#2ca02c",  # muted green
-    "#d62728",  # muted red
-    "#9467bd"   # soft purple
+    "#1f77b4",  # blue
+    "#ffb97e",  # light orange
+    "#1f77b4",  # repeat or add muted variants
+    "#ffb97e",
+    "#1f77b4"
 ]
 alt.themes.register('custom_theme', lambda: {
     "config": {
