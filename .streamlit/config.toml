@@ -1,9 +1,9 @@
 [theme]
 base="dark"
 primaryColor="#db5461"          # Sea green
-backgroundColor="#686963"        # Soft mint background
+backgroundColor="#8aa29e"        # Soft mint background
 secondaryBackgroundColor="#8aa29e"
 font = "sans serif" # Clean, modern font
 
 [server]
-runOnSave=true
+runOnSave=true 
