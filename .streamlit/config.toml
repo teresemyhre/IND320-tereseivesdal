@@ -1,8 +1,8 @@
 [theme]
-primaryColor = "#6d86ff"  # A vibrant blue for primary elements
-backgroundColor = "#1a1a2e" # Dark background for the main content
-secondaryBackgroundColor = "#2e2e4e" # Slightly lighter dark for secondary elements (e.g., sidebar, input fields)
-textColor = "#e0e0e0" # Light gray for general text
+base="light"
+primaryColor="#8A2BE2"          # Blue violet
+backgroundColor="#FAF9FF"       # Very light lavender
+secondaryBackgroundColor="#FFFFFF"
 font = "sans serif" # Clean, modern font
 
 [server]
