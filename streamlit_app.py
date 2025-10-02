@@ -1,7 +1,8 @@
 import streamlit as st
 import pandas as pd
 
-st.title("Hello IND320 👋")
+import streamlit as st
 
-st.write("This is a minimum working example of a Streamlit app.")
-
+st.title("IND320 Project – Weather Data")
+st.write("Welcome! This app shows data analysis and visualization of the provided CSV file.")
+st.write("Use the sidebar to navigate between pages.")
