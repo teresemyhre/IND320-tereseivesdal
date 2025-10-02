@@ -1,6 +1,17 @@
 import streamlit as st
 import pandas as pd
 
+import altair as alt
+
+alt.themes.register('custom_theme', lambda: {
+    "config": {
+        "range": {
+            "category": ["#4A90E2", "#7B8A8B", "#BDC3C7"]  # your muted theme colors
+        }
+    }
+})
+alt.themes.enable('custom_theme')
+
 st.title("Data Table – First Month with Line Charts")
 
 # Load CSV
