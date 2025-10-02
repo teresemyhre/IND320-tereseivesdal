@@ -1,7 +1,10 @@
 import streamlit as st
 import pandas as pd
 
-# Load data with caching
+st.title("Data Table – First Month")
+st.write("Each row shows a column of the dataset with a mini line chart for the first month.")
+
+# Load CSV
 @st.cache_data
 def load_data():
     df = pd.read_csv("data/open-meteo-subset.csv")
@@ -10,21 +13,14 @@ def load_data():
 
 df = load_data()
 
-st.title("Data Table – First Month")
-
-# Select first month
+# Filter first month
 first_month = df["time"].dt.month == df["time"].dt.month.min()
 df_first_month = df[first_month]
 
-# Build table with one row per column
-columns = []
-for col in df.columns[1:]:  # skip 'time'
-    columns.append(
-        st.column_config.LineChartColumn(
-            label=col,
-            width=250
-        )
-    )
+# Transpose so columns become rows
+df_transposed = df_first_month.set_index("time").T
 
-# Streamlit currently requires using `st.dataframe` or `st.table` with column configs
-st.dataframe(df_first_month)
+# Display table with line charts
+for idx, row in df_transposed.iterrows():
+    st.write(f"**{idx}**")  # Column name
+    st.line_chart(row)       # Mini line chart for that column
