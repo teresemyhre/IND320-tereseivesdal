@@ -1,7 +1,7 @@
 [theme]
 base="light"
 primaryColor="#8A2BE2"          # Blue violet
-backgroundColor="#EDE7F6"       # Very light lavender
+backgroundColor="#F5F0FA"       # Very light lavender
 secondaryBackgroundColor="#FFFFFF"
 font = "sans serif" # Clean, modern font
 
