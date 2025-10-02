@@ -1,5 +1,5 @@
 [theme]
-base="light"
+base="dark"
 primaryColor="#2E8B57"          # Sea green
 backgroundColor="#F7FDFC"        # Soft mint background
 secondaryBackgroundColor="#FFFFFF"
