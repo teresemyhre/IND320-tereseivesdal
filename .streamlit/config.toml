@@ -1,5 +1,5 @@
 [theme]
-base="light"
+base="dark"
 primaryColor="#fd9e53"             # strong blue for buttons/highlights
 backgroundColor="#3b97da"          # soft neutral background
 secondaryBackgroundColor="#9ecaec"  # page panels
