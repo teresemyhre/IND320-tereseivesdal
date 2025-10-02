@@ -1,8 +1,9 @@
 [theme]
 base="light"
-primaryColor="#8A2BE2"          # Blue violet
-backgroundColor="#F5F0FA"       # Very light lavender
-secondaryBackgroundColor="#FFFFFF"
+primaryColor="#4A90E2"          # Muted blue accent
+backgroundColor="#F5F7FA"       # Light gray-blue background
+secondaryBackgroundColor="#FFFFFF"  # White cards/panels
+textColor="#2C3E50" 
 font = "sans serif" # Clean, modern font
 
 [server]
