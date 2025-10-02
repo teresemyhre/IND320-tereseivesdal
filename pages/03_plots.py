@@ -21,9 +21,11 @@ month = st.select_slider("Select month", options=months, value=months[0])
 
 subset = df[df["time"].dt.month == month]
 
+# Take the first date in the subset and get the month name. This is to display the month name in the header.
+month_name = subset["time"].iloc[0].strftime("%B")
 if option == "All":
-    st.header(f"All columns for month {month}")
+    st.header(f"All columns for month {month_name}")
     st.line_chart(subset.set_index("time")[columns])
 else:
-    st.header(f"{option} for month {month}")
+    st.header(f"{option} for month {month_name}")
     st.line_chart(subset.set_index("time")[[option]])
