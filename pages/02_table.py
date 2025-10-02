@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import utils  # activates the custom Altair theme (see utils.py)
 
 st.title("Data Table – First Month with Line Charts")
 
