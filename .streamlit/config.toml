@@ -2,7 +2,7 @@
 base="dark"
 primaryColor="#2E8B57"          # Sea green
 backgroundColor="#F7FDFC"        # Soft mint background
-secondaryBackgroundColor="#FFFFFF"
+secondaryBackgroundColor="#0b0000ff"
 font = "sans serif" # Clean, modern font
 
 [server]
