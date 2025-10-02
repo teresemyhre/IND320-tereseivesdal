@@ -24,8 +24,8 @@ subset = df[df["time"].dt.month == month]
 # Take the first date in the subset and get the month name. This is to display the month name in the header.
 month_name = subset["time"].iloc[0].strftime("%B")
 if option == "All":
-    st.header(f"All columns for month {month_name}")
+    st.header(f"All columns for {month_name}")
     st.line_chart(subset.set_index("time")[columns])
 else:
-    st.header(f"{option} for month {month_name}")
+    st.header(f"{option} for {month_name}")
     st.line_chart(subset.set_index("time")[[option]])
