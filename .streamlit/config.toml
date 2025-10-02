@@ -1,8 +1,8 @@
 [theme]
-base="light"
-primaryColor="#FF7F50"          # Coral
-backgroundColor="#FFF5F0"       # Warm cream
-secondaryBackgroundColor="#FFFFFF"
+base="dark"
+primaryColor="#1DB954"          # Spotify green
+backgroundColor="#121212"       # Deep black/gray
+secondaryBackgroundColor="#1E1E1E"
 font = "sans serif" # Clean, modern font
 
 [server]
