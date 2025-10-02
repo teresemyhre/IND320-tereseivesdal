@@ -16,20 +16,14 @@ df = load_data()
 first_month = df["time"].dt.month == df["time"].dt.month.min()
 df_first_month = df[first_month]
 
-# Transpose so columns become rows
-df_transposed = df_first_month.set_index("time").T
-
-# Convert column names to strings
-df_transposed.columns = df_transposed.columns.astype(str)
-
-# Reset index so row names become a column
+# Transpose so each original column becomes a row
+df_transposed = df_first_month.drop(columns=["time"]).T  # drop 'time'
 df_transposed.reset_index(inplace=True)
 df_transposed.rename(columns={"index": "Variable"}, inplace=True)
 
-# Only numeric columns for LineChartColumn
+# All remaining columns are numeric, create LineChartColumn config
 numeric_cols = df_transposed.select_dtypes(include=["float64", "int64"]).columns
 
-# Create column config for line charts
 column_configs = {}
 for col in numeric_cols:
     column_configs[col] = st.column_config.LineChartColumn(
