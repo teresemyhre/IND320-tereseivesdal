@@ -16,20 +16,26 @@ df = load_data()
 first_month = df["time"].dt.month == df["time"].dt.month.min()
 df_first_month = df[first_month]
 
-# Transpose so each original column becomes a row
-df_transposed = df_first_month.drop(columns=["time"]).T  # drop 'time'
-df_transposed.reset_index(inplace=True)
-df_transposed.rename(columns={"index": "Variable"}, inplace=True)
+# Prepare a table: one row per column
+table_data = []
+for col in df_first_month.columns:
+    if col == "time":
+        continue  # skip time column
+    row = {
+        "Variable": col,
+        "First Month": df_first_month[col].tolist()  # list of values for LineChartColumn
+    }
+    table_data.append(row)
 
-# All remaining columns are numeric, create LineChartColumn config
-numeric_cols = df_transposed.select_dtypes(include=["float64", "int64"]).columns
+df_table = pd.DataFrame(table_data)
 
-column_configs = {}
-for col in numeric_cols:
-    column_configs[col] = st.column_config.LineChartColumn(
-        label=col,
-        width=250
+# Configure the LineChartColumn
+column_configs = {
+    "First Month": st.column_config.LineChartColumn(
+        label="First Month Values",
+        width=400
     )
+}
 
-# Display the DataFrame with column-level line charts
-st.dataframe(df_transposed, column_config=column_configs)
+# Display the table
+st.dataframe(df_table, column_config=column_configs)
