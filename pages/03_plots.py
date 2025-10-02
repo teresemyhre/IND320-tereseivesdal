@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 
+st.title("Data Visualization")
+
 @st.cache_data
 def load_data():
     df = pd.read_csv("data/open-meteo-subset.csv")
@@ -8,8 +10,6 @@ def load_data():
     return df
 
 df = load_data()
-
-st.title("Data Visualization")
 
 # Column selector
 columns = list(df.columns.drop("time"))
@@ -27,9 +27,14 @@ month_range = st.select_slider(
 # Filter data within selected month range
 subset = df[(df["time"].dt.month >= month_range[0]) & (df["time"].dt.month <= month_range[1])]
 
-# Get the header from first date in the subset
-month_names = subset["time"].dt.strftime("%B").unique()
-header_text = f"{option} for {' - '.join(month_names)}" if option != "All" else f"All columns for {' - '.join(month_names)}"
+# Get first and last month names
+first_month_name = subset["time"].dt.strftime("%B").iloc[0]
+last_month_name = subset["time"].dt.strftime("%B").iloc[-1]
+if first_month_name == last_month_name:
+    header_text = f"{option} for {first_month_name}" if option != "All" else f"All columns for {first_month_name}"
+else:
+    header_text = f"{option} for {first_month_name} – {last_month_name}" if option != "All" else f"All columns for {first_month_name} – {last_month_name}"
+
 st.markdown(f"<h2 style='text-align: center;'>{header_text}</h2>", unsafe_allow_html=True)
 
 # Plot
