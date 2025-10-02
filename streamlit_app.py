@@ -2,7 +2,7 @@ import streamlit as st
 import altair as alt
 
 # Define your muted theme palette (exactly 5 colors for your 5 series)
-custom_colors = ["#fd9e53", "#ffcea8", "#dddddd", "#9ecaec", "#3b97da"]
+custom_colors = ["#fd9e53", "#ffcea8", "#6CA0DC", "#9ecaec", "#3b97da"]
 
 alt.themes.register('custom_theme', lambda: {
     "config": {
