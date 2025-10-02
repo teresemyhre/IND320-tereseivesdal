@@ -1,8 +1,7 @@
 import streamlit as st
 import pandas as pd
 
-st.title("Data Table – First Month")
-st.write("Each row shows a column of the dataset with a mini line chart for the first month.")
+st.title("Data Table – First Month with Line Charts")
 
 # Load CSV
 @st.cache_data
@@ -17,10 +16,18 @@ df = load_data()
 first_month = df["time"].dt.month == df["time"].dt.month.min()
 df_first_month = df[first_month]
 
-# Transpose so columns become rows
+# Transpose so that columns become rows
 df_transposed = df_first_month.set_index("time").T
+df_transposed.reset_index(inplace=True)
+df_transposed.rename(columns={"index": "Variable"}, inplace=True)
 
-# Display table with line charts
-for idx, row in df_transposed.iterrows():
-    st.write(f"**{idx}**")  # Column name
-    st.line_chart(row)       # Mini line chart for that column
+# Each numeric column becomes a LineChartColumn
+column_configs = {}
+for col in df_transposed.columns[1:]:  # skip "Variable" column
+    column_configs[col] = st.column_config.LineChartColumn(
+        label=col,
+        width=250
+    )
+
+# Display table with LineChartColumn
+st.dataframe(df_transposed, column_config=column_configs)
