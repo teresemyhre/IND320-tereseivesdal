@@ -1,9 +1,9 @@
 [theme]
-base="dark"
-primaryColor="#fd9e53"             # strong blue for buttons/highlights
-backgroundColor="#9ecaec"          # soft neutral background
-secondaryBackgroundColor="#3b97da"  # page panels
-textColor="#333333"                 # dark gray for readability
+base="light"
+primaryColor="#4A90E2"          # Muted blue accent
+backgroundColor="#F5F7FA"       # Light gray-blue background
+secondaryBackgroundColor="#FFFFFF"  # White cards/panels
+textColor="#2C3E50" 
 font = "sans serif" # Clean, modern font
 
 [server]
