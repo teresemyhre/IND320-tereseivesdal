@@ -1,8 +1,8 @@
 [theme]
 base="dark"
 primaryColor="#f7b801"          # Sea green
-backgroundColor="#9683ec"        # Soft mint background
-secondaryBackgroundColor="#5d16a6"
+backgroundColor="#5d16a6"        # Soft mint background
+secondaryBackgroundColor="#9683ec"
 font = "sans serif" # Clean, modern font
 
 [server]
