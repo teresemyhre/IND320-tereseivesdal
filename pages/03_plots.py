@@ -15,17 +15,25 @@ st.title("Data Visualization")
 columns = list(df.columns.drop("time"))
 option = st.selectbox("Choose a column to plot", ["All"] + columns)
 
-# Month selector
+# Month selector (range)
 months = sorted(df["time"].dt.month.unique())
-month = st.select_slider("Select month", options=months, value=months[0])
+month_range = st.select_slider(
+    "Select months range",
+    options=months,
+    value=(months[0], months[0]),  # default is first month
+    format_func=lambda x: df[df["time"].dt.month == x]["time"].dt.strftime("%B").iloc[0]
+)
 
-subset = df[df["time"].dt.month == month]
+# Filter data within selected month range
+subset = df[(df["time"].dt.month >= month_range[0]) & (df["time"].dt.month <= month_range[1])]
 
-# Take the first date in the subset and get the month name. This is to display the month name in the header.
-month_name = subset["time"].iloc[0].strftime("%B")
+# Get the header from first date in the subset
+month_names = subset["time"].dt.strftime("%B").unique()
+header_text = f"{option} for {' - '.join(month_names)}" if option != "All" else f"All columns for {' - '.join(month_names)}"
+st.markdown(f"<h2 style='text-align: center;'>{header_text}</h2>", unsafe_allow_html=True)
+
+# Plot
 if option == "All":
-    st.header(f"All columns for {month_name}")
     st.line_chart(subset.set_index("time")[columns])
 else:
-    st.header(f"{option} for {month_name}")
     st.line_chart(subset.set_index("time")[[option]])
