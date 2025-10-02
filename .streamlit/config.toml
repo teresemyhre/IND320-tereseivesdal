@@ -1,8 +1,8 @@
 [theme]
 base="dark"
 primaryColor="#fd9e53"             # strong blue for buttons/highlights
-backgroundColor="#3b97da"          # soft neutral background
-secondaryBackgroundColor="#9ecaec"  # page panels
+backgroundColor="#9ecaec"          # soft neutral background
+secondaryBackgroundColor="#3b97da"  # page panels
 textColor="#333333"                 # dark gray for readability
 font = "sans serif" # Clean, modern font
 
