@@ -7,3 +7,13 @@ def custom_theme():
     return alt.theme.ThemeConfig(
         {"config": {"range": {"category": custom_colors}}}
     )
+
+# Function to get color mapping for production groups
+def get_color_map():
+    return {
+        "hydro":   custom_colors[0],
+        "wind":    custom_colors[1],
+        "solar":   custom_colors[3],  # warmer orange for solar
+        "thermal": custom_colors[2],
+        "other":   custom_colors[4],
+    }
