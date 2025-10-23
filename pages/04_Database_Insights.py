@@ -4,11 +4,11 @@ import plotly.express as px
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 import calendar
-import utils  # 👈 activates your Altair theme + color palette
+import utils  # activates Altair theme + color palette
 
 st.set_page_config(page_title="Production Explorer", page_icon="⚡", layout="wide")
 
-# ---------- MongoDB connection ----------
+# MongoDB connection 
 @st.cache_resource
 def get_mongo_collection():
     uri = st.secrets["MONGO"]["uri"]
@@ -25,26 +25,30 @@ def load_df():
     df.columns = [c.lower() for c in df.columns]
     return df
 
+# Load data
 df = load_df()
 
+# Prepare selection options
 price_areas = sorted(df["pricearea"].dropna().unique().tolist())
 prod_groups = sorted(df["productiongroup"].dropna().unique().tolist())
 months = list(range(1, 13))
 month_labels = [calendar.month_name[m] for m in months]
 
-# 💡 reuse colors from utils.py
+# reuse colors from utils.py
 color_map = utils.get_color_map()
 
 st.title("Energy Production Explorer (2021)")
 
-# ---------- Columns ----------
+# Columns for layout
 left, right = st.columns(2)
 
-# ---------- LEFT: pie chart ----------
+# LEFT: pie chart
 with left:
+    # Total production by group (year)
     st.subheader("Total production by group (year)")
     chosen_area = st.radio("Price area", price_areas, index=0, horizontal=True)
 
+    # Aggregate data for pie chart
     df_area_year = (
         df[df["pricearea"] == chosen_area]
         .groupby("productiongroup", as_index=False)["quantitykwh"]
@@ -52,6 +56,7 @@ with left:
         .sort_values("quantitykwh", ascending=False)
     )
 
+    # Pie chart
     fig_pie = px.pie(
         df_area_year,
         values="quantitykwh",
@@ -61,11 +66,15 @@ with left:
         title=f"Total Production by Group — {chosen_area} (2021)",
         template="plotly_white",
     )
-    fig_pie.update_layout(title_x=0.15, width=600, height=600, margin=dict(t=60, b=40, l=40, r=40))
+    # Customize layout
+    fig_pie.update_layout(title_x=0.15, 
+                          width=600, 
+                          height=600, 
+                          margin=dict(t=60, b=40, l=40, r=40))
 
     st.plotly_chart(fig_pie, use_container_width=True)
 
-# ---------- RIGHT: line plot ----------
+# RIGHT: line plot
 with right:
     st.subheader("Hourly production (month)")
 
@@ -75,9 +84,11 @@ with right:
     else:
         selected_groups = st.multiselect("Production groups", options=prod_groups, default=prod_groups)
 
+    # Month selection
     month_label = st.selectbox("Month", month_labels, index=0)
     month_num = month_labels.index(month_label) + 1
 
+    # Filter data for line plot
     mask = (
         (df["pricearea"] == chosen_area)
         & (df["starttime"].dt.month == month_num)
@@ -85,6 +96,7 @@ with right:
     )
     df_month = df[mask].copy().sort_values("starttime")
 
+    # Line plot
     fig_line = px.line(
         df_month,
         x="starttime",
@@ -95,6 +107,7 @@ with right:
         template="plotly_white",
 
     )
+    # Customize layout
     fig_line.update_layout(title_x=0.19, 
                            width=900, 
                            height=450, 
@@ -103,7 +116,7 @@ with right:
                            yaxis_title="Production (kWh)")
     st.plotly_chart(fig_line, use_container_width=True)
 
-# ---------- Expander ----------
+# Expander for data source info
 with st.expander("Data source"):
     # Get the MongoDB collection from the cached function
     collection = get_mongo_collection()
