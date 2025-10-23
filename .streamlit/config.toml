@@ -1,8 +1,8 @@
 [theme]
 base="light"
-primaryColor="#fd9e53"          # Muted blue accent
-backgroundColor="#F5F7FA"       # Light gray-blue background
-secondaryBackgroundColor="#FFFFFF"  # White cards/panels
+primaryColor="#fd9e53"          
+backgroundColor="#e6edf3ff"       
+secondaryBackgroundColor="#c6d7e4ff"  
 textColor="#2C3E50" 
 font = "sans serif" # Clean, modern font
 

@@ -12,5 +12,5 @@ __pycache__/
 # OS files
 .DS_Store
 
-# .env file
-.env
+# secrets
+.streamlit/secrets.toml
