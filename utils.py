@@ -1,6 +1,6 @@
 import altair as alt
 
-custom_colors = ["#fd9e53", "#ffcea8", "#416287", "#9ecaec", "#3b97da"]
+custom_colors = ["#416287", "#9ecaec", "#5890b7", "#fd9e53", "#ffcea8"]
 
 @alt.theme.register('custom_theme', enable=True)
 def custom_theme():
