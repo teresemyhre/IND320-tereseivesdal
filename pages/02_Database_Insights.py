@@ -4,11 +4,19 @@ import plotly.express as px
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 import calendar
-import utils  # activates Altair theme + color palette
+import helpers.utils as utils  # activates Altair theme + color palette
+import numpy as np
+from helpers.sidebar import AREAS, GROUPS, _init_globals, _sync_all
 
 st.set_page_config(page_title="Production Explorer", page_icon="⚡", layout="wide")
 
-# MongoDB connection 
+qp = st.query_params
+if "area" in qp:
+    st.session_state["price_area"] = qp["area"]
+if "groups" in qp:
+    st.session_state["production_group"] = qp["groups"].split(",")
+
+# MongoDB connection
 @st.cache_resource
 def get_mongo_collection():
     uri = st.secrets["MONGO"]["uri"]
@@ -27,6 +35,10 @@ def load_df():
 
 # Load data
 df = load_df()
+df = load_df()
+
+# Store globally so all pages can access
+st.session_state["elhub_data"] = df
 
 # Prepare selection options
 price_areas = sorted(df["pricearea"].dropna().unique().tolist())
@@ -39,6 +51,13 @@ color_map = utils.get_color_map()
 
 st.title("Energy Production Explorer (2021)")
 
+
+_init_globals()
+
+# --- Mirror canonical session state into widgets before rendering ---
+st.session_state["_price_area_widget"] = st.session_state["price_area"]
+st.session_state["_production_group_widget"] = st.session_state["production_group"]
+
 # Columns for layout
 left, right = st.columns(2)
 
@@ -46,7 +65,13 @@ left, right = st.columns(2)
 with left:
     # Total production by group (year)
     st.subheader("Total production by group (year)")
-    chosen_area = st.radio("Price area", price_areas, index=0, horizontal=True)
+    st.radio(
+        "Price area", AREAS,
+        horizontal=True,
+        key="_price_area_widget",
+        on_change=_sync_all
+    )
+    chosen_area = st.session_state["price_area"] 
 
     # Aggregate data for pie chart
     df_area_year = (
@@ -67,8 +92,7 @@ with left:
         template="plotly_white",
     )
     # Customize layout
-    fig_pie.update_layout(title_x=0.15, 
-                          width=600, 
+    fig_pie.update_layout(width=600, 
                           height=600, 
                           margin=dict(t=60, b=40, l=40, r=40))
 
@@ -78,21 +102,46 @@ with left:
 with right:
     st.subheader("Hourly production (month)")
 
-    # Streamlit 1.38+ pills, else fallback to multiselect
-    if hasattr(st, "pills"):
-        selected_groups = st.pills("Production groups", options=prod_groups, selection_mode="multi", default=prod_groups)
-    else:
-        selected_groups = st.multiselect("Production groups", options=prod_groups, default=prod_groups)
+    # Ensure valid selection before rendering pills
+    sel = st.session_state.get("_production_group_widget", None)
+
+    if isinstance(sel, str):  # sometimes becomes '' as a string
+        sel = []
+    if not sel or any(v not in GROUPS for v in sel):
+        sel = GROUPS[:]  # fallback to all valid groups
+
+    st.session_state["_production_group_widget"] = sel
+    st.session_state["production_group"] = sel  # keep canonical in sync
+    
+    # Create the pills widget
+    st.pills(
+        "Production groups", options=GROUPS,
+        selection_mode="multi",
+        key="_production_group_widget",
+        on_change=_sync_all
+    )
+
+    # Prevent empty selection (fallback to all)
+    if not st.session_state["_production_group_widget"]:
+        st.session_state["_production_group_widget"] = GROUPS[:]
+        st.session_state["production_group"] = GROUPS[:]
+
+
+
+
+
+
+    selected_groups = st.session_state["production_group"]  # canonical
 
     # Month selection
-    month_label = st.selectbox("Month", month_labels, index=0)
+    month_label = st.selectbox("Month", month_labels)
     month_num = month_labels.index(month_label) + 1
 
     # Filter data for line plot
     mask = (
-        (df["pricearea"] == chosen_area)
+        (df["pricearea"].str.upper() == st.session_state["price_area"].upper())
         & (df["starttime"].dt.month == month_num)
-        & (df["productiongroup"].isin(selected_groups))
+        & (df["productiongroup"].str.lower().isin([g.lower() for g in st.session_state["production_group"]]))
     )
     df_month = df[mask].copy().sort_values("starttime")
 
@@ -108,8 +157,7 @@ with right:
 
     )
     # Customize layout
-    fig_line.update_layout(title_x=0.19, 
-                           width=900, 
+    fig_line.update_layout(width=900, 
                            height=450, 
                            margin=dict(t=60, b=40, l=40, r=40), 
                            xaxis_title="Time",

@@ -7,4 +7,4 @@ textColor="#2C3E50"
 font = "sans serif" # Clean, modern font
 
 [server]
-runOnSave=true
+runOnSave=false

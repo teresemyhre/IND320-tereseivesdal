@@ -2,7 +2,16 @@ import os
 import base64
 import streamlit as st
 
-st.set_page_config(page_title="IND320 Project", page_icon="🦆")
+st.set_page_config(page_title="IND320 Project", page_icon="🦆", layout="wide")
+
+
+# --- Initialize global state once ---
+if "price_area" not in st.session_state:
+    st.session_state["price_area"] = "NO1"
+
+if "production_group" not in st.session_state:
+    st.session_state["production_group"] = ["hydro", "wind", "solar", "thermal", "other"]
+
 
 # Load and encode the duck image 
 base_dir = os.path.dirname(__file__)
@@ -26,7 +35,7 @@ st.markdown(
 
     .speech-bubble {{
         position: relative;
-        top: -100px; /* Adjust this number for height */
+        top: -110px; /* Adjust this number for height */
         background: #f9f9f9;
         border-radius: 20px;
         padding: 25px 30px;
