@@ -1,5 +1,12 @@
 streamlit
 pandas
-altair
+numpy
 plotly
 pymongo
+requests
+requests-cache
+retry-requests
+openmeteo-requests
+scikit-learn
+statsmodels
+scipy
