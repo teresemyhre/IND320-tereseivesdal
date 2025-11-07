@@ -35,7 +35,6 @@ def load_df():
 
 # Load data
 df = load_df()
-df = load_df()
 
 # Store globally so all pages can access
 st.session_state["elhub_data"] = df
