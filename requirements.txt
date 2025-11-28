@@ -10,3 +10,6 @@ openmeteo-requests
 scikit-learn
 statsmodels
 scipy
+shapely
+branca
+python-dateutil

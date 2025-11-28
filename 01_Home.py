@@ -3,7 +3,7 @@ import base64
 import streamlit as st
 
 st.set_page_config(page_title="IND320 Project", page_icon="🦆", layout="wide")
-
+ 
 
 # --- Initialize global state once ---
 if "price_area" not in st.session_state:

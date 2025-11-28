@@ -16,15 +16,19 @@ qp = st.query_params
 if "area" in qp:
     st.session_state["price_area"] = qp["area"]
 if "groups" in qp:
-    st.session_state["production_group"] = qp["groups"].split(",")
+    st.session_state["selected_groups"] = qp["groups"].split(",")
 
 # initialize sidebar controls for price area and production group
 with st.sidebar:
-    global_sidebar()
+    valid = global_sidebar()
+
+if not valid:
+    st.error("Please select at least one production group before continuing.")
+    st.stop()
 
 # retrieve current selections from session state
 area = st.session_state["price_area"]
-groups = st.session_state["production_group"]
+groups = st.session_state.get("selected_groups", [])
 
 # title for the page
 st.title("Weather Outlier and Anomaly Detection")

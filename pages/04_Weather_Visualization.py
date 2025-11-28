@@ -16,11 +16,15 @@ if "groups" in qp:
     st.session_state["production_group"] = qp["groups"].split(",")
 
 with st.sidebar:
-    global_sidebar()
+    valid = global_sidebar()
+
+if not valid:
+    st.error("Please select at least one production group before continuing.")
+    st.stop()
 
 # read current state anywhere
 area = st.session_state["price_area"]
-groups = st.session_state["production_group"]
+groups = st.session_state.get("selected_groups", [])
 
 st.title("Data Visualization")
 

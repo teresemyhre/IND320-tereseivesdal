@@ -23,6 +23,8 @@ from sklearn.neighbors import LocalOutlierFactor
 from scipy.fftpack import dct, idct
 from scipy.signal import stft
 import plotly.colors as pc
+import datetime as dt
+
 
 # Define custom colors
 from helpers.utils import custom_colors, get_color_map
@@ -60,10 +62,21 @@ def download_era5_data(latitude, longitude, year):
     pandas.DataFrame
         DataFrame containing hourly weather data for the specified location and year
     """
+    # Determine today's date to avoid requesting future data
+    today = dt.date.today()
 
-    # Define the time period
     start_date = f"{year}-01-01"
-    end_date = f"{year}-12-31"
+
+    # If year is the current year → limit end_date to today
+    if year == today.year:
+        end_date = today.strftime("%Y-%m-%d")
+    else:
+        end_date = f"{year}-12-31"
+
+    # Rebuild session (keeps retry behavior)
+    cache_session = requests_cache.CachedSession('.cache', expire_after=-1)
+    retry_session = retry(cache_session, retries=5, backoff_factor=0.2)
+    openmeteo = openmeteo_requests.Client(session=retry_session)
 
     # Define which weather variables to retrieve
     variables = [
@@ -156,6 +169,16 @@ def temperature_spc_from_satv(
 
     t = np.asarray(time)
     x = np.asarray(temperature, dtype=float)
+
+    # interpolate NaNs 
+    x = pd.Series(x).interpolate(limit_direction="both").to_numpy()
+
+    # Low-pass trend via DCT
+    X = dct(x, norm="ortho")
+
+
+
+
 
     # Low-pass trend via DCT (keep only the lowest frequencies)
     X = dct(x, norm="ortho")
@@ -363,8 +386,8 @@ def stl_decomposition_elhub(
 
     # Case-insensitive filtering
     subset = df[
-        (df["pricearea"].str.upper() == price_area.upper())
-        & (df["productiongroup"].str.lower() == production_group.lower())
+        (df["pricearea"].str.upper() == price_area.upper()) &
+        (df["group"].str.lower() == production_group.lower())
     ].copy()
 
     if subset.empty:
@@ -393,7 +416,7 @@ def stl_decomposition_elhub(
     fig = make_subplots(
         rows=4, cols=1, shared_xaxes=True,
         subplot_titles=("Observed", "Trend", "Seasonal", "Remainder"),
-        vertical_spacing=0.04
+        vertical_spacing=0.025
     )
 
     components = ["quantitykwh", "trend", "seasonal", "remainder"]
@@ -411,7 +434,7 @@ def stl_decomposition_elhub(
 
     # Clean layout consistent with the course book
     fig.update_layout(
-        height=950,
+        height=750,
         template="plotly_white",
         title=dict(
             text=f"STL Decomposition — {price_area.upper()} {production_group.capitalize()}",
@@ -462,7 +485,7 @@ def plot_spectrogram_elhub(data,
     # Filter subset
     subset = data[
         (data["pricearea"].str.upper() == price_area.upper()) &
-        (data["productiongroup"].str.lower() == production_group.lower())
+        (data["group"].str.lower() == production_group.lower())
     ].sort_values("starttime")
 
     if subset.empty:

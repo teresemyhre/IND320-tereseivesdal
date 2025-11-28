@@ -16,4 +16,9 @@ def get_color_map():
         "solar":   custom_colors[3],  # warmer orange for solar
         "thermal": custom_colors[2],
         "other":   custom_colors[4],
+        "household":   custom_colors[0],
+        "tertiary":    custom_colors[1],
+        "secondary":   custom_colors[3],  # warmer orange for solar
+        "primary": custom_colors[2],
+        "cabin":   custom_colors[4],
     }

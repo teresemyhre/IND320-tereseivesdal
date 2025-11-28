@@ -13,11 +13,15 @@ if "groups" in qp:
 
 # Sidebar with global controls
 with st.sidebar:
-    global_sidebar()
+    valid = global_sidebar()
+
+if not valid:
+    st.error("Please select at least one production group before continuing.")
+    st.stop()
 
 # read current session state
 area = st.session_state["price_area"]
-groups = st.session_state["production_group"]
+groups = st.session_state.get("selected_groups", [])
  
 st.title("Data Table – First Month with Line Charts")
 
