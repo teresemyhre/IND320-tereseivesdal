@@ -32,10 +32,7 @@ if "groups" in qp:
 # --------------------------------------------------------
 # Ensure data is loaded (no global_sidebar on this page)
 # --------------------------------------------------------
-if "elhub_data" not in st.session_state:
-    st.session_state["elhub_data"] = load_elhub_data()
-
-df = st.session_state["elhub_data"]
+df = load_elhub_data()
 
 # Initialize sidebar globals for safety
 _init_globals()
@@ -83,10 +80,9 @@ st.title(f"Energy {title_type} Explorer")
 # --------------------------------------------------------
 # Prepare widget state for this page (mirroring canonical)
 # --------------------------------------------------------
-st.session_state.setdefault("_price_area_widget", st.session_state["price_area"])
-st.session_state.setdefault("_energy_type_widget", energy_type)
-st.session_state.setdefault("_groups_widget", st.session_state.get("selected_groups", allowed_groups[:]))
-
+st.session_state["_price_area_widget"] = st.session_state["price_area"]
+st.session_state["_energy_type_widget"] = energy_type
+st.session_state["_groups_widget"] = st.session_state.get("selected_groups", allowed_groups[:])
 
 # Energy type selector (production / consumption)
 st.radio(

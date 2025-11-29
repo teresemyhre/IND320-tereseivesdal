@@ -14,11 +14,16 @@ if "production_group" not in st.session_state:
 
 
 # Load and encode the duck image 
-base_dir = os.path.dirname(__file__)
+@st.cache_resource
+def load_duck_base64():
+    base_dir = os.path.dirname(__file__)
+    duck_path = os.path.join(base_dir, "data", "images", "duck.png")
 
-duck_path = os.path.join(base_dir, "data", "images", "duck.png")
-with open(duck_path, "rb") as f:
-    duck_base64 = base64.b64encode(f.read()).decode("utf-8")
+    with open(duck_path, "rb") as f:
+        return base64.b64encode(f.read()).decode("utf-8")
+
+duck_base64 = load_duck_base64()
+
 left, right = st.columns([1.5, 1])
 
 with left:

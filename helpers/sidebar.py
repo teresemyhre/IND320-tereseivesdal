@@ -77,7 +77,8 @@ def global_sidebar():
     st.markdown("### Global Controls")
 
     # Ensure elhub data loaded
-    st.session_state["elhub_data"] = load_elhub_data()
+    # st.session_state["elhub_data"] = load_elhub_data()
+    load_elhub_data()   # Cached, light, never stored in state
 
     # Initialize everything
     _init_globals()

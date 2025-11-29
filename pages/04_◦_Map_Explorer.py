@@ -32,7 +32,7 @@ if not valid:
 energy_type = st.session_state["energy_type"]
 groups = st.session_state["selected_groups"]
 chosen_area = st.session_state["price_area"]
-df = st.session_state["elhub_data"]
+df = load_elhub_data()
 
 group_col = "productiongroup" if energy_type == "production" else "consumptiongroup"
 title_type = "Production" if energy_type == "production" else "Consumption"
@@ -62,6 +62,7 @@ def normalize(area: str) -> str:
 # -----------------------------------------------------------
 @st.cache_data
 def filter_data(df, date_start, date_end, groups, group_col):
+    df = load_elhub_data()
     mask = (
         (df["starttime"].dt.date >= date_start) &
         (df["starttime"].dt.date <= date_end) &

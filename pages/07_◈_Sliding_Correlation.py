@@ -8,7 +8,7 @@ from plotly.subplots import make_subplots
 from helpers.sidebar import global_sidebar
 from helpers.functions import download_era5_data, cities_df
 from helpers.utils import custom_colors
-
+from helpers.data_loader import load_elhub_data
 
 # -----------------------------------------------------------
 # Page config
@@ -105,28 +105,28 @@ df_weather = df_weather.set_index("time")
 # -----------------------------------------------------------
 # Load Elhub energy data
 # -----------------------------------------------------------
-df_energy = st.session_state["elhub_data"]
+@st.cache_data
+def load_energy(area, year, group_col, group_name):
+    df = load_elhub_data()
+    df = df[
+        (df["pricearea"] == area) &
+        (df["starttime"].dt.year == year) &
+        (df[group_col] == group_name)
+    ]
+    df = df.groupby("starttime")["quantitykwh"].sum().resample("1H").mean().interpolate()
+    return df
 
-df_energy = df_energy[
-    (df_energy["pricearea"] == area) &
-    (df_energy["starttime"].dt.year == year) &
-    (df_energy[group_col].isin(page_groups))
-]
-
-df_energy = df_energy.groupby("starttime")["quantitykwh"].sum()
-df_energy = df_energy.resample("1H").mean().interpolate()
-
+df_energy = df_energy = load_energy(area, year, group_col, selected_group)
 
 # -----------------------------------------------------------
 # Merge weather + energy
 # -----------------------------------------------------------
-df = pd.DataFrame({
-    "meteo": df_weather[met_var],
-    "energy": df_energy
-}).dropna()
+@st.cache_data
+def merge_weather_energy(df_weather, df_energy, month):
+    df = pd.DataFrame({"meteo": df_weather, "energy": df_energy}).dropna()
+    return df[df.index.month == month].sort_index()
 
-# Filter month
-df = df[df.index.month == selected_month].sort_index()
+df = merge_weather_energy(df_weather[met_var], df_energy, selected_month)
 
 if df.empty:
     st.warning("No data available for selected month / settings.")
@@ -134,6 +134,7 @@ if df.empty:
 
 # Apply lag
 df["meteo_lagged"] = df["meteo"].shift(lag)
+
 
 
 # -----------------------------------------------------------
