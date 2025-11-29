@@ -26,6 +26,7 @@ if not valid:
 area = st.session_state["price_area"]
 groups = st.session_state.get("selected_groups", [])
 
+
 st.title("Data Visualization")
 
 # Get coordinates for selected price area
