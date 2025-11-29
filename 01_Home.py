@@ -49,7 +49,7 @@ with left:
             content: "";
             position: absolute;
             right: -20px;  /* Tail moved to the right side */
-            top: 108px;
+            top: 120px;
             width: 0;
             height: 0;
             border: 12px solid transparent;
@@ -109,7 +109,7 @@ with right:
 
         </style>
         <div class="duck-container">
-            <img src="data:image/png;base64,{duck_base64}" width="300">  <!-- Bigger duck -->
+            <img src="data:image/png;base64,{duck_base64}" width="330">  <!-- Bigger duck -->
         </div>
         """,
         unsafe_allow_html=True
