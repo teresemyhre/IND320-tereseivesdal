@@ -22,7 +22,7 @@ if not valid:
     st.error("Please select at least one group before continuing.")
     st.stop()
 
-st.title("Sliding-Window Correlation: Meteorology ↔ Energy")
+st.title("Sliding-Window Correlation: Weather ↔ Energy")
 
 
 # -----------------------------------------------------------
@@ -46,7 +46,7 @@ row1_col1, row1_col2 = st.columns(2)
 
 with row1_col1:
     met_var = st.selectbox(
-        "Meteorological variable",
+        "Weather variable",
         ["temperature_2m", "precipitation", "wind_speed_10m",
          "wind_gusts_10m", "wind_direction_10m"]
     )
@@ -179,7 +179,7 @@ w_end = min(len(df), center + window // 2)
 # -----------------------------------------------------------
 fig = make_subplots(
     rows=3, cols=1,
-    vertical_spacing=0.1,
+    vertical_spacing=0.14,
     shared_xaxes=False,
     subplot_titles=(
         f"{met_var} (lagged {lag}h)",
