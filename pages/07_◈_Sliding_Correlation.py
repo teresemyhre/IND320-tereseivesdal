@@ -179,7 +179,7 @@ w_end = min(len(df), center + window // 2)
 # -----------------------------------------------------------
 fig = make_subplots(
     rows=3, cols=1,
-    vertical_spacing=0.08,
+    vertical_spacing=0.1,
     shared_xaxes=False,
     subplot_titles=(
         f"{met_var} (lagged {lag}h)",
@@ -248,7 +248,7 @@ fig.add_trace(
 fig.add_hline(y=0, line_dash="dot", line_color="gray", row=3, col=1)
 
 fig.update_layout(
-    height=1000,
+    height=600,
     template="plotly_white",
     showlegend=False,
     margin=dict(l=40, r=30, t=60, b=40)
